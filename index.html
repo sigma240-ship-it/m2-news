@@ -1,81 +1,76 @@
-<!DOCTYPE html>
-
+<!doctype html>
 <html lang="ko">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<title>내 금융 지표 보기 | 교육용 스타터</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>한국은행 저장본 리포트</title>
 <style>
-    :root { --navy:#173b70; --blue:#2a66b5; --ink:#172033; --muted:#5b6880; --line:#dce4f0; --paper:#f5f8fc; --amber:#ed9f21; --green:#12785a; }
-    * { box-sizing:border-box; } body { margin:0; font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo",sans-serif; color:var(--ink); background:var(--paper); }
-    header { background:var(--navy); color:#fff; padding:18px 28px; display:flex; justify-content:space-between; align-items:center; }
-    header strong { font-size:17px; } header span { font-size:12px; color:#d8e5fb; }
-    main { max-width:1080px; margin:28px auto; padding:0 20px 40px; } .eyebrow { font-size:12px; font-weight:800; letter-spacing:.08em; color:var(--blue); }
-    h1 { font-size:34px; margin:8px 0; letter-spacing:0; } .intro { color:var(--muted); margin:0 0 20px; line-height:1.55; }
-    .notice { display:flex; gap:10px; background:#fff5df; border:1px solid #f0d49a; padding:12px 14px; border-radius:8px; font-size:14px; margin-bottom:20px; } .notice b { color:#87540c; }
-    .grid { display:grid; grid-template-columns:230px 1fr; gap:18px; } .panel { background:#fff; border:1px solid var(--line); border-radius:10px; padding:20px; }
-    .panel h2 { font-size:16px; margin:0 0 12px; } .series { display:grid; gap:8px; } button { border:1px solid var(--line); border-radius:7px; background:#fff; padding:12px; text-align:left; cursor:pointer; color:var(--ink); font-weight:700; } button.active { background:#edf4ff; border-color:#7ca7e0; color:var(--navy); }
-    .chart-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; } .chart-head h2 { margin:0; font-size:23px; } .unit { color:var(--muted); font-size:13px; margin-top:5px; } .chart { margin:20px 0 10px; height:290px; border:1px solid var(--line); border-radius:8px; padding:12px; background:linear-gradient(#fff,#fbfcff); }
-    svg { width:100%; height:100%; } .legend { display:flex; gap:15px; color:var(--muted); font-size:13px; } .legend i { width:10px; height:10px; border-radius:50%; background:var(--blue); display:inline-block; }
-    .source { margin-top:18px; border-top:1px solid var(--line); padding-top:16px; display:flex; justify-content:space-between; gap:20px; align-items:center; } .source p { margin:0; font-size:14px; color:var(--muted); line-height:1.5; } .source button { background:var(--navy); color:#fff; border:0; white-space:nowrap; }
-    dialog { border:0; border-radius:12px; box-shadow:0 20px 70px #0d1b3555; width:min(620px,calc(100% - 40px)); padding:0; } dialog::backdrop { background:#10214677; } .dialog-head { padding:20px 24px; background:var(--navy); color:#fff; display:flex; justify-content:space-between; align-items:center; } .dialog-head button { width:32px; height:32px; padding:0; text-align:center; } .dialog-body { padding:24px; } .detail { display:grid; grid-template-columns:140px 1fr; gap:12px; border-bottom:1px solid var(--line); padding:12px 0; font-size:14px; line-height:1.5; } .detail b { color:var(--navy); }
-    .empty { padding:24px; color:var(--muted); } footer { max-width:1080px; margin:0 auto; padding:0 20px 30px; color:var(--muted); font-size:12px; }
-    select {font:inherit;padding:6px;margin-left:8px} table{border-collapse:collapse;width:100%;font-size:14px}td,th{padding:8px;border-bottom:1px solid var(--line);text-align:right}a{color:#155eaa;overflow-wrap:anywhere}.detail span{min-width:0}header{gap:12px;flex-wrap:wrap}.eyebrow{letter-spacing:0}
-    @media (max-width:720px){ .grid{grid-template-columns:1fr}.chart-head{display:block} header{padding:15px 18px} h1{font-size:28px} }
-
-.panel{border-radius:8px}#meaning{margin-top:18px;border-top:1px solid var(--line);padding-top:14px}summary{cursor:pointer;font-weight:700}#meaning .detail{padding:8px 0}.chart svg text{font-size:11px}
+  body{font:16px/1.6 system-ui,"Malgun Gothic",sans-serif;margin:32px auto;max-width:960px;padding:0 20px;color:#1c2430;background:#fff}
+  h1{font-size:24px;margin-bottom:4px}
+  .lead{color:#5b6880;font-size:14px;margin-top:0}
+  .notice{background:#fdf0f2;border-left:5px solid #b83e50;padding:10px 14px;margin:14px 0;font-size:13px}
+  table{border-collapse:collapse;width:100%;font-size:14px}
+  th,td{border:1px solid #dce4f0;padding:10px;text-align:left;vertical-align:top}
+  th{background:#f5f8fc}
+  a{color:#1559a5;overflow-wrap:anywhere}
+  .status{color:#87540c;font-weight:700}
+  .tag{display:inline-block;background:#edf4ff;color:#173b70;border:1px solid #7ca7e0;border-radius:5px;padding:2px 6px;font-size:12px}
+  .tag.none{background:#f2f2f2;color:#5b6880;border-color:#ccc}
+  footer{color:#5b6880;font-size:12px;margin-top:20px}
 </style>
 </head>
 <body>
-<header><strong>핀테크 AI · M1 실습</strong><span>LOCAL-FIRST · 공개 데이터 · 투자 판단 아님</span></header>
-<main>
-<div class="eyebrow">M1 · 학생 출발본</div>
-<h1>내 금융 지표 보기</h1>
-<p class="intro">지표를 선택하고, 값보다 먼저 기간·단위·출처·해석 한계를 확인합니다.</p>
-<div class="notice"><b>교육용 범위</b><span>이 화면은 2015~2024 동결 데이터 예시입니다. 실시간 시장 정보나 개인별 투자 판단을 제공하지 않습니다.</span></div>
-<p><a href="report.html">리포트가 있는 링크 — 한국은행 저장본 리포트 보기</a></p>
-<div class="grid">
-<aside class="panel"><h2>지표 선택</h2><div class="series" id="series"></div></aside>
-<section class="panel">
-<div class="chart-head"><div><h2 id="title"></h2><div class="unit" id="unit"></div></div><span class="eyebrow">FROZEN SAMPLE</span></div>
-<label>표시 기간<select id="period"><option value="all">2015~2024</option><option value="recent">2022~2024</option><option value="empty">2025~2026 (미보유)</option></select></label>
-<div class="chart" id="chart"></div><div class="legend"><span><i></i> 교육용 동결 시계열</span><span id="period-label">기간: 2015~2024</span></div>
-<details><summary>원본 값 표로 확인</summary><table id="value-table"></table></details>
-<div class="source"><p><b>출처 확인은 기능의 일부입니다.</b><br/>기관, 기준시점, 단위, 해석 한계를 함께 확인합니다.</p><button id="open-source">출처·한계 보기</button></div>
-</section>
-</div>
-</main>
-<footer>World Bank Indicators API 기반 교육용 재구성 · 수집일 2026-08-25 · 외부 재사용 시 원출처와 라이선스를 다시 확인하세요.</footer>
-<dialog id="source-dialog"><div class="dialog-head"><strong>출처·기준시점·해석 한계</strong><button aria-label="닫기" id="close-source">×</button></div><div class="dialog-body" id="source-body"></div></dialog>
-<script src="data/macro_sample.js"></script>
-<script>
-    const data = window.MACRO_DATA;
-    const byId = id => data.series.find(item => item.id === id);
-    let selected = byId(new URLSearchParams(location.search).get('series')) || data.series[0];
-    function chart(series){
-      if(!series.values.length)return '<p class="empty">선택한 기간에 보유한 데이터가 없습니다. 값을 추정해 채우지 않습니다.</p>';
-      const display=series.values.map(([yr,v])=>[yr,v/(series.scale||1)]);
-      const values=display.map(([,v])=>v), min=Math.min(...values), max=Math.max(...values), pad=Math.max((max-min)*.15,.1);
-      const lo=min-pad, hi=max+pad, w=700,h=250,left=52,right=22,top=18,bottom=36;
-      const x=i=>left+i*((w-left-right)/Math.max(display.length-1,1)); const y=v=>top+(hi-v)/(hi-lo)*(h-top-bottom);
-      const points=display.map(([,v],i)=>`${x(i)},${y(v)}`).join(' ');
-      let dp=series.unit==='%'?1:0;while(dp<3&&new Set([0,.5,1].map(t=>(hi-t*(hi-lo)).toFixed(dp))).size<3)dp++;const grid=[0,.5,1].map(t=>{const yy=top+t*(h-top-bottom);const value=(hi-t*(hi-lo)).toFixed(dp);return `<line x1="${left}" y1="${yy}" x2="${w-right}" y2="${yy}" stroke="#dce4f0"/><text x="4" y="${yy+4}" fill="#5b6880" font-size="12">${value}</text>`}).join('');
-      const dots=display.map(([year,v],i)=>`<circle cx="${x(i)}" cy="${y(v)}" r="5" fill="#2a66b5"/><text x="${x(i)-14}" y="${h-10}" fill="#5b6880" font-size="12">${year}</text><text x="${x(i)-13}" y="${y(v)-11}" fill="#173b70" font-size="12" font-weight="700">${v.toFixed(2)}</text>`).join('');
-      return `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="${series.label} ${series.values[0][0]}년부터 ${series.values.at(-1)[0]}년까지 추이"><g>${grid}<polyline points="${points}" fill="none" stroke="#2a66b5" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>${dots}</g></svg>`;
-    }
-    function render(){
-      document.querySelector('#series').innerHTML=data.series.map(s=>`<button class="${s.id===selected.id?'active':''}" data-id="${s.id}">${s.label}<br><small>${s.unit}</small></button>`).join('');
-      document.querySelectorAll('[data-id]').forEach(btn=>{btn.setAttribute('aria-pressed',btn.dataset.id===selected.id);btn.onclick=()=>{selected=byId(btn.dataset.id);render()}});
-      const period=document.querySelector('#period').value;
-      const vals=selected.values.filter(([yr])=>period==='all'||(period==='recent'?yr>=2022:yr>=2025));
-      document.querySelector('#period-label').textContent=period==='all'?'2015~2024':period==='recent'?'2022~2024':'2025~2026 (미보유)';
-      document.querySelector('#title').textContent=selected.label; document.querySelector('#unit').textContent=`차트 단위: ${selected.unit} · 소수 둘째 자리 표시`; document.querySelector('#chart').innerHTML=chart({...selected,values:vals});
-      document.querySelector('#value-table').innerHTML='<tr><th>연도</th><th>원본 값 ('+selected.raw_unit+')</th></tr>'+vals.map(([yr,v])=>`<tr><td>${yr}</td><td>${v}</td></tr>`).join('');
-      document.querySelector('#source-body').innerHTML=[['제공기관',data.provider],['계열',selected.series_id],['원출처',`<a target="_blank" rel="noopener" href="${selected.source_url}">지표별 API 원문 열기</a>`],['수집일',data.retrieved_on],['기간','2015~2024 교육용 발췌'],['원본 단위',selected.raw_unit],['표시 변환',selected.scale===1e12?'US$ 원본을 1조로 나눈 후 소수2자리 표시':'원본 값 유지, 차트만 소수2자리 표시'],['해석 한계',selected.limit]].map(([k,v])=>`<div class="detail"><b>${k}</b><span>${v}</span></div>`).join('');
-    }
-    const dialog=document.querySelector('#source-dialog'); document.querySelector('#open-source').onclick=()=>dialog.showModal(); document.querySelector('#close-source').onclick=()=>dialog.close();
-    document.querySelector('#period').onchange=render;
-    render(); if(new URLSearchParams(location.search).get('view')==='source') dialog.showModal();
-  </script>
+<p><a href="metrics.html">지표 화면 보기 (M1)</a></p>
+<h1>한국은행 저장본 리포트</h1>
+<p class="lead">news_items.json 5건 기준 · 웹 재요청 없이 로컬 저장본만 사용</p>
+<div class="notice"><b>본문 미확보 안내.</b> 아래 5건은 제목·URL·발행일·출처만 확보했습니다. 제목을 다시 쓴 문장을 요약으로 올리지 않으며, "제목 기반 설명"은 제목 문구의 형식(보도자료/의사록/방향 발표 등)을 분류한 것일 뿐 본문 내용을 요약한 것이 아닙니다. "관련 지표"는 제목 키워드 매칭 결과이며 실제 지표 영향 분석이 아닙니다.</div>
+<table>
+<thead>
+<tr><th>제목(링크)</th><th>발행일</th><th>출처</th><th>제목 기반 설명</th><th>본문 확보 상태</th><th>관련 지표</th></tr>
+</thead>
+<tbody>
+<tr>
+  <td><a href="https://www.bok.or.kr/portal/bbs/P0000559/view.do?nttId=11064612&menuNo=200690" target="_blank" rel="noopener">「통화신용정책보고서」(2026년 9월)</a></td>
+  <td>2026-09-10</td>
+  <td>한국은행</td>
+  <td>정기 보고서(제목에 「」 표기 · "통화신용정책보고서")</td>
+  <td class="status">제목만 확보 — 요지 보류</td>
+  <td><span class="tag">기준금리·통화정책</span></td>
+</tr>
+<tr>
+  <td><a href="https://www.bok.or.kr/portal/bbs/P0000559/view.do?nttId=11064191&menuNo=200690" target="_blank" rel="noopener">통화정책방향(2026.8.27)</a></td>
+  <td>2026-08-27</td>
+  <td>한국은행</td>
+  <td>통화정책방향 결정 발표(제목에 "방향" + 날짜 표기)</td>
+  <td class="status">제목만 확보 — 요지 보류</td>
+  <td><span class="tag">기준금리·통화정책</span></td>
+</tr>
+<tr>
+  <td><a href="https://www.bok.or.kr/portal/bbs/P0000559/view.do?nttId=11064057&menuNo=200690" target="_blank" rel="noopener">[보도자료] 한국은행, 경남지역 집중호우 피해 중소기업 지원</a></td>
+  <td>2026-08-25</td>
+  <td>한국은행</td>
+  <td>보도자료(제목에 "[보도자료]" 태그 · 재해 지원 정책)</td>
+  <td class="status">제목만 확보 — 요지 보류</td>
+  <td><span class="tag none">지표 키워드 매칭 없음</span></td>
+</tr>
+<tr>
+  <td><a href="https://www.bok.or.kr/portal/bbs/P0000559/view.do?nttId=11063631&menuNo=200690" target="_blank" rel="noopener">금융통화위원회 의사록(2026년 제14차)(2026.7.23)</a></td>
+  <td>2026-08-11</td>
+  <td>한국은행</td>
+  <td>금융통화위원회 회의록(제목에 "의사록" + 차수 표기)</td>
+  <td class="status">제목만 확보 — 요지 보류</td>
+  <td><span class="tag">기준금리·통화정책</span></td>
+</tr>
+<tr>
+  <td><a href="https://www.bok.or.kr/portal/bbs/P0000559/view.do?nttId=11063511&menuNo=200690" target="_blank" rel="noopener">금융통화위원회 의사록(2026년 제13차)(2026.7.16)</a></td>
+  <td>2026-08-04</td>
+  <td>한국은행</td>
+  <td>금융통화위원회 회의록(제목에 "의사록" + 차수 표기)</td>
+  <td class="status">제목만 확보 — 요지 보류</td>
+  <td><span class="tag">기준금리·통화정책</span></td>
+</tr>
+</tbody>
+</table>
+<footer>출처: 한국은행 · 수집일 2026-09-11(저장본 기준) · 본 리포트는 교육용이며 투자 판단이나 최신 정책 확인 자료가 아닙니다.</footer>
 </body>
 </html>
